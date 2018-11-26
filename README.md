@@ -1,7 +1,7 @@
-###Approval System  
+### Approval System  
 The approval system package is an add-on package that allows seamless integration into laravel 5.7+
 
-####Installation  
+#### Installation  
 To install simply pull in the package to your laravel project  
 `composer install httpfactory\approvals`  
   
@@ -13,11 +13,11 @@ Add the following line to your service providers array :
   
 After registering the package, you will need to run migrations
 
-#####Run The Migrations  
+#### Run The Migrations  
 you must run your migrations as follows  
 `php artisan migrate`
 
-####Usage  
+#### Usage  
 There are multiple types of approvals :  
   
   1. Quick Approval ( 1 to 1 )
@@ -25,7 +25,7 @@ There are multiple types of approvals :
   3. MultiTier Approval ( multiple groups must approve/deny )
   
   
-####Quick Approval  
+#### Quick Approval  
 Below is an example of a quick approval :  
 
 ```
