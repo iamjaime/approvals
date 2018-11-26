@@ -1,0 +1,17 @@
+{
+    "name": "httpfactory/approvals",
+    "description": "Approvals Package",
+    "authors": [
+        {
+            "name": "Code Head",
+            "email": "codehead@codelegends.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Httpfactory\\Approvals\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {}
+}
