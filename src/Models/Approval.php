@@ -4,6 +4,7 @@ namespace Httpfactory\Approvals\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Httpfactory\Approvals\Models\Tag;
+use Httpfactory\Approvals\Models\Approver;
 
 class Approval extends Model
 {
@@ -22,6 +23,16 @@ class Approval extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'approval_tags');
+    }
+
+    /**
+     * The approvers associated with this approval
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function approvers()
+    {
+        return $this->hasMany(Approver::class);
     }
 
 }
