@@ -17,6 +17,19 @@ After registering the package, you will need to run migrations
 you must run your migrations as follows  
 `php artisan migrate`
 
+#### Events  
+You will need to add the following events to the  `app\Providers\EventServiceProvider.php`  
+  
+##### Approval Approved Event ( fires off when an approval is approved )  
+`Httpfactory\Approvals\Events\ApprovalApproved`  
+
+##### Approval Denied Event ( fires off when an approval is denied )  
+`Httpfactory\Approvals\Events\ApprovalDenied`  
+
+##### Approval Request Event ( fires off when an approval request is sent )  
+`Httpfactory\Approvals\Events\ApprovalRequest`  
+  
+
 #### Usage  
 There are multiple types of approvals :  
   
@@ -51,4 +64,5 @@ class Someclass {
 ```  
   
 In the example above, we are sending a request to a user for approval.
+  
   
