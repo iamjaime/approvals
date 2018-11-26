@@ -20,7 +20,7 @@ class Tag extends Model
      */
     public function approvals()
     {
-        return $this->belongsToMany(Approval::class);
+        return $this->belongsToMany(Approval::class, 'approval_tags');
     }
 
 
@@ -31,6 +31,6 @@ class Tag extends Model
      */
     public function approvalConfigurations()
     {
-        return $this->belongsToMany(ApprovalConfiguration::class);
+        return $this->belongsToMany(ApprovalConfiguration::class, 'approval_configurations');
     }
 }
