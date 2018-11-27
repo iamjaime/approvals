@@ -80,7 +80,7 @@ class Someclass {
     
         //Create a new Approval of certain type, then request the actual approval.
         $approval = new QuickApproval($user);
-        $approval->title = 'Credit Card';
+        $approval->name = 'Credit Card';
         $approval->description = 'Requesting Permission to use the company credit card for something cool';
         $approval->approvalsNeeded = 1;
 
