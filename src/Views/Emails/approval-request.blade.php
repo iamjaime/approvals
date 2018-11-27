@@ -10,5 +10,5 @@ you are receiving this email because {{ $approval->requester->name }} has reques
 
 {{ $approver->description }} <br><br>
 
-<a href="{{ env('APP_URL') . '/approve/' . $approval->token }}">Approve</a> / <a href="{{ env('APP_URL') . '/deny/' . $approval->token }}">Deny</a>
+<a href="{{ env('APP_URL') . '/approve/' . $approver->token }}">Approve</a> / <a href="{{ env('APP_URL') . '/deny/' . $approver->token }}">Deny</a>
 
