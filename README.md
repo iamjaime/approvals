@@ -77,9 +77,10 @@ class Someclass {
         
         //Some user instance that is requesting the approval...
         $user = User::find(1);
+        $team_id = 1; //the team/company that the user belongs to
     
         //Create a new Approval of certain type, then request the actual approval.
-        $approval = new QuickApproval($user);
+        $approval = new QuickApproval($user, $team_id);
         $approval->name = 'Credit Card';
         $approval->description = 'Requesting Permission to use the company credit card for something cool';
         $approval->approvalsNeeded = 1;
