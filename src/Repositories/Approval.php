@@ -53,10 +53,10 @@ abstract class Approval implements Approvable {
     public $team_id;
 
     /**
-     * The approval token
+     * The approver records
      * @var
      */
-    public $token;
+    public $approvers = [];
 
 
     public function __construct(ApprovalRequester $requester, $team_id)
@@ -84,8 +84,7 @@ abstract class Approval implements Approvable {
     {
         $approval = $this->saveApproval();
         $this->id = $approval->id;
-
-        $this->saveApprovers();
+        $this->approvers = $this->saveApprovers();
 
         //fires an event
         event(new ApprovalRequest($this));
@@ -109,17 +108,27 @@ abstract class Approval implements Approvable {
 
     /**
      * Handles saving the approvers
+     * @return array
      */
     protected function saveApprovers()
     {
+        $approvers = [];
+
         foreach($this->from as $approver){
+
             $approverRecord = new Approver();
             $approverRecord->approval_id = $this->id;
             $approverRecord->approver_id = $approver->id;
             $approverRecord->status = 'pending';
             $approverRecord->token = str_random(60);
             $approverRecord->save();
+
+            $approverRecord->email = $approver->email;
+
+            array_push($approvers, $approverRecord);
         }
+
+        return $approvers;
     }
 
 

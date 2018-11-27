@@ -3,7 +3,7 @@
 namespace Httpfactory\Approvals\Listeners;
 
 use Httpfactory\Approvals\Events\ApprovalRequest as ApprovalRequestEvent;
-use Httpfactory\Approvals\Models\Approval;
+use Httpfactory\Approvals\Models\Approver;
 
 use Illuminate\Support\Facades\Mail;
 use Httpfactory\Approvals\Mail\ApprovalRequest as ApprovalRequestEmail;
@@ -30,7 +30,7 @@ class ApprovalRequest
     {
         //get the approval object from the event....
         $approval = $event->approval;
-        $needApprovalBy = $event->approval->from; //the users that we are requesting approval from
+        $needApprovalBy = $event->approval->approvers; //the users that we are requesting approval from
 
         //here we should probably shoot an email to each user that needs to approve
 
