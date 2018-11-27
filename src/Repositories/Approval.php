@@ -108,6 +108,7 @@ abstract class Approval implements Approvable {
             $approverRecord->approval_id = $this->id;
             $approverRecord->approver_id = $approver->id;
             $approverRecord->status = 'pending';
+            $approverRecord->token = str_random(60);
             $approverRecord->save();
         }
     }
