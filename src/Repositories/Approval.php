@@ -47,15 +47,22 @@ abstract class Approval implements Approvable {
     public $requester;
 
     /**
+     * The Team Id that is requesting the approval
+     * @var
+     */
+    public $team_id;
+
+    /**
      * The approval token
      * @var
      */
     public $token;
 
 
-    public function __construct(ApprovalRequester $requester)
+    public function __construct(ApprovalRequester $requester, $team_id)
     {
         $this->requester = $requester;
+        $this->team_id = $team_id;
     }
 
 
@@ -91,6 +98,8 @@ abstract class Approval implements Approvable {
     protected function saveApproval()
     {
         $approval = new ApprovalRecord();
+        $approval->requester_id = $this->requester->id;
+        $approval->team_id = $this->team_id;
         $approval->name = $this->name;
         $approval->description = $this->description;
         $approval->save();
