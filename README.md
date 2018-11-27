@@ -29,7 +29,23 @@ You will need to add the following events to the  `app\Providers\EventServicePro
 ##### Approval Request Event ( fires off when an approval request is sent )  
 `Httpfactory\Approvals\Events\ApprovalRequest`  
   
-
+The Events should look something like the code below    
+```
+           //Begin the approval events
+           'Httpfactory\Approvals\Events\ApprovalRequest' => [
+               'Httpfactory\Approvals\Listeners\ApprovalRequest',
+           ],
+   
+           'Httpfactory\Approvals\Events\ApprovalApproved' => [
+               'Httpfactory\Approvals\Listeners\ApprovalApproved',
+           ],
+   
+           'Httpfactory\Approvals\Events\ApprovalDenied' => [
+               'Httpfactory\Approvals\Listeners\ApprovalDenied',
+           ],
+```  
+  
+  
 #### Usage  
 There are multiple types of approvals :  
   
@@ -47,17 +63,24 @@ Below is an example of a quick approval :
 namespace Acme\SomeProject;
 
 use Httpfactory\Approvals\QuickApproval;
+use App\User;
 
 class Someclass {
     
     public function requestApproval(){
+        
+        //Some user instance that is requesting the approval...
+        $user = User::find(1);
+    
         //Create a new Approval of certain type, then request the actual approval.
-        $approval = new QuickApproval();
+        $approval = new QuickApproval($user);
         $approval->title = 'Credit Card';
         $approval->description = 'Requesting Permission to use the company credit card for something cool';
         $approval->approvalsNeeded = 1;
 
-        $approval->from(['User 1'])->sendRequest();
+        $usersThatIneedApprovalFrom = User::where('id', '!=', 1)->get();
+
+        $approval->from($usersThatIneedApprovalFrom)->sendRequest();
     }
 
 }
