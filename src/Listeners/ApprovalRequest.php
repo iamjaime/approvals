@@ -37,27 +37,10 @@ class ApprovalRequest
         //this is just an example listener because whoever uses this package should be able
         //to add their own listener for the events that we fire off.
 
-        $emails = $this->getApproverEmails($needApprovalBy);
-
-        foreach($emails as $email) {
-            Mail::to($email)->send(new ApprovalRequestEmail($approval));
+        foreach( $needApprovalBy as $approver ) {
+            Mail::to($approver->email)->send(new ApprovalRequestEmail($approval, $approver));
         }
-    }
 
-
-    /**
-     * Handles getting the approver(s) email(s)
-     *
-     * @param $approvers
-     * @return array
-     */
-    protected function getApproverEmails($approvers)
-    {
-        $emails = [];
-        foreach($approvers as $approver) {
-            array_push($emails, $approver->email);
-        }
-        return $emails;
     }
 
 }

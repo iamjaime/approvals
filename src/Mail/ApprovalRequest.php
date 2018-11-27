@@ -11,14 +11,19 @@ class ApprovalRequest extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $approval;
+
+    public $approver;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($approval, $approver)
     {
-        //
+        $this->approval = $approval;
+        $this->approver = $approver;
     }
 
     /**
@@ -28,6 +33,6 @@ class ApprovalRequest extends Mailable
      */
     public function build()
     {
-        return $this->view("approvals::emails.approval-request");
+        return $this->view("approvals::emails.approval-request", ['approval' => $this->approval, 'approver' => $this->approver]);
     }
 }
