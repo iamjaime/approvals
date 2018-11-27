@@ -11,6 +11,12 @@ register the package in your `config\app.php` file.
 Add the following line to your service providers array :  
 `Httpfactory\Approvals\ApprovalServiceProvider::class`  
   
+Now you need to run the following command :  
+`php artisan vendor:publish --provider=Httpfactory\Approvals\ApprovalServiceProvider`  
+  
+    
+    
+    
 After registering the package, you will need to run migrations
 
 #### Run The Migrations  
