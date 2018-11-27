@@ -5,6 +5,8 @@ namespace Httpfactory\Approvals\Models;
 use Illuminate\Database\Eloquent\Model;
 use Httpfactory\Approvals\Models\Tag;
 use Httpfactory\Approvals\Models\Approver;
+use Httpfactory\Approvals\Models\Team;
+use Httpfactory\Approvals\Models\User;
 
 class Approval extends Model
 {
@@ -13,6 +15,27 @@ class Approval extends Model
         'name',
         'description'
     ];
+
+
+    /**
+     * The team associated with this approval
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    public function team()
+    {
+        return $this->belongsTo(Team::class, 'team_id');
+    }
+
+    /**
+     * The approval requester
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function requester()
+    {
+        return $this->belongsTo(User::class, 'requester_id');
+    }
 
 
     /**

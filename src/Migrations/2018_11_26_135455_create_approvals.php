@@ -15,6 +15,19 @@ class CreateApprovals extends Migration
     {
         Schema::create('approvals', function (Blueprint $table) {
             $table->increments('id');
+
+
+            //This means that our package is now specific to spark because we are referencing the teams table
+            //Foreign Key Referencing the id on the team table.
+            $table->integer('team_id')->unsigned();
+            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
+
+
+            //Foreign Key Referencing the id on the users table.
+            $table->integer('requester_id')->unsigned();
+            $table->foreign('requester_id')->references('id')->on('users')->onDelete('cascade');
+
+
             $table->string('name');
             $table->text('description');
             $table->timestamps();
@@ -28,6 +41,10 @@ class CreateApprovals extends Migration
      */
     public function down()
     {
+        Schema::table('approvals', function($table) {
+            $table->dropForeign(['team_id']);
+            $table->dropForeign(['requester_id']);
+        });
         Schema::dropIfExists('approvals');
     }
 }
