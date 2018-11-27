@@ -12,22 +12,15 @@ class ApprovalRequest
      */
     public $approval;
 
-    /**
-     * The user instances of the users that need to approve
-     *
-     * @var array an array of user instances
-     */
-    public $users;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($approval, $users)
+    public function __construct($approval)
     {
         $this->approval = $approval;
-        $this->users = $users;
     }
 
 }

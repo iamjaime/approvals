@@ -3,17 +3,46 @@
 namespace Httpfactory\Approvals\Repositories;
 
 use Httpfactory\Approvals\Contracts\Approvable;
-
+use Httpfactory\Approvals\Events\ApprovalRequest;
+use Illuminate\Contracts\Auth\Authenticatable as ApprovalRequester;
 
 abstract class Approval implements Approvable {
 
+    /**
+     * Approval object title
+     * @var
+     */
     public $title;
 
+    /**
+     * Approval object description
+     * @var
+     */
     public $description;
 
+    /**
+     * Array of user instances that we require approval from
+     * @var
+     */
     public $from;
 
+    /**
+     * Number of approvals needed
+     * @var int
+     */
     public $approvalsNeeded = 1; //by default
+
+    /**
+     * The User Instance that is requesting the approval
+     * @var ApprovalRequester
+     */
+    public $requester;
+
+
+    public function __construct(ApprovalRequester $requester)
+    {
+        $this->requester = $requester;
+    }
 
 
     /**
@@ -33,7 +62,7 @@ abstract class Approval implements Approvable {
     public function sendRequest()
     {
         //fires an event
-        //event(new ApprovalRequest($this->approval));
+        event(new ApprovalRequest($this));
     }
 
 
