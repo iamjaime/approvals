@@ -28,6 +28,6 @@ class ApprovalRequest extends Mailable
      */
     public function build()
     {
-        return $this->view( __DIR__ . "../Views/Emails/approval-request");
+        return $this->view("approvals::emails.approval-request");
     }
 }
