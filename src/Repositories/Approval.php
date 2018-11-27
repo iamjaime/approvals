@@ -4,15 +4,23 @@ namespace Httpfactory\Approvals\Repositories;
 
 use Httpfactory\Approvals\Contracts\Approvable;
 use Httpfactory\Approvals\Events\ApprovalRequest;
+use Httpfactory\Approvals\Models\Approval as ApprovalRecord;
+use Httpfactory\Approvals\Models\Approver;
 use Illuminate\Contracts\Auth\Authenticatable as ApprovalRequester;
 
 abstract class Approval implements Approvable {
 
     /**
-     * Approval object title
+     * Approval object id
      * @var
      */
-    public $title;
+    protected $id;
+
+    /**
+     * Approval object name
+     * @var
+     */
+    public $name;
 
     /**
      * Approval object description
@@ -38,6 +46,12 @@ abstract class Approval implements Approvable {
      */
     public $requester;
 
+    /**
+     * The approval token
+     * @var
+     */
+    public $token;
+
 
     public function __construct(ApprovalRequester $requester)
     {
@@ -61,8 +75,41 @@ abstract class Approval implements Approvable {
      */
     public function sendRequest()
     {
+        $approval = $this->saveApproval();
+        $this->id = $approval->id;
+
+        $this->saveApprovers();
+
         //fires an event
         event(new ApprovalRequest($this));
+    }
+
+
+    /**
+     * Handles saving the approval object
+     */
+    protected function saveApproval()
+    {
+        $approval = new ApprovalRecord();
+        $approval->name = $this->name;
+        $approval->description = $this->description;
+        $approval->save();
+
+        return $approval;
+    }
+
+    /**
+     * Handles saving the approvers
+     */
+    protected function saveApprovers()
+    {
+        foreach($this->from as $approver){
+            $approverRecord = new Approver();
+            $approverRecord->approval_id = $this->id;
+            $approverRecord->approver_id = $approver->id;
+            $approverRecord->status = 'pending';
+            $approverRecord->save();
+        }
     }
 
 
