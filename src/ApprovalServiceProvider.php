@@ -15,6 +15,13 @@ class ApprovalServiceProvider extends ServiceProvider
     {
         //load up the migrations...
         $this->loadMigrationsFrom(__DIR__ . '/migrations');
+        //load up the views...
+        $this->loadViewsFrom(__DIR__.'/views', 'approvals');
+
+        //publish our views...
+        $this->publishes([
+            __DIR__.'/views' => resource_path('views/vendor/approvals'),
+        ]);
     }
 
     /**
