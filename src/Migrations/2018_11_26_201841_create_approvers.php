@@ -26,6 +26,8 @@ class CreateApprovers extends Migration
 
             $table->enum('status', ['pending','approved', 'denied'])->default('pending');
 
+            $table->string('token')->nullable();
+
             $table->timestamps();
         });
     }
