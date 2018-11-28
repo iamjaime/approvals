@@ -17,10 +17,12 @@ class CreateApprovals extends Migration
             $table->increments('id');
 
 
-            //This means that our package is now specific to spark because we are referencing the teams table
-            //Foreign Key Referencing the id on the team table.
-            $table->integer('team_id')->unsigned();
-            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
+            if(Schema::hasTable('teams')){
+                //This means that our package is now specific to spark because we are referencing the teams table
+                //Foreign Key Referencing the id on the team table.
+                $table->integer('team_id')->unsigned()->nullable();
+                $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
+            }
 
 
             //Foreign Key Referencing the id on the users table.
@@ -42,7 +44,11 @@ class CreateApprovals extends Migration
     public function down()
     {
         Schema::table('approvals', function($table) {
-            $table->dropForeign(['team_id']);
+
+            if(Schema::hasTable('teams')){
+                $table->dropForeign(['team_id']);
+            }
+
             $table->dropForeign(['requester_id']);
         });
         Schema::dropIfExists('approvals');
