@@ -17,6 +17,8 @@ class CreateApprovalConfigurations extends Migration
             $table->increments('id');
             $table->string('name');
             $table->text('description');
+            $table->integer('yes'); //number of yes's required before auto approval
+            $table->integer('no'); //number of no's required before auto denial
             $table->timestamps();
         });
     }
