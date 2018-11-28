@@ -72,8 +72,8 @@ abstract class Approval implements Approvable {
     {
         $this->requester = $requester;
 
-        if(!is_null($this->requester->team)){
-            $this->team_id = $this->requester->team->id;
+        if(!is_null($this->requester->currentTeam)){
+            $this->team_id = $this->requester->currentTeam->id;
         }
 
         $this->config = $config;
@@ -112,7 +112,9 @@ abstract class Approval implements Approvable {
     {
         $approval = new ApprovalRecord();
         $approval->requester_id = $this->requester->id;
-        $approval->team_id = $this->team_id;
+        if(!is_null($this->team_id)){
+            $approval->team_id = $this->team_id;
+        }
         $approval->name = $this->name;
         $approval->description = $this->description;
         $approval->save();
