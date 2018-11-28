@@ -77,10 +77,12 @@ class Someclass {
         
         //Some user instance that is requesting the approval...
         $user = User::find(1);
-        $team_id = 1; //the team/company that the user belongs to
-    
+        
+        //If you have a Laravel Spark and are using "Teams"
+        //The User's currentTeam is going to be used as the Team Id association.
+               
         //Create a new Approval of certain type, then request the actual approval.
-        $approval = new QuickApproval($user, $team_id);
+        $approval = new QuickApproval($user);
         $approval->name = 'Credit Card';
         $approval->description = 'Requesting Permission to use the company credit card for something cool';
         $approval->approvalsNeeded = 1;
