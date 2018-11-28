@@ -2,7 +2,7 @@
 
 $router->group(['middleware' => 'web'], function ($router) {
     // Appprove
-    $router->get('/approve/{token}', 'Httpfactory\Approvals\Http\Controllers\PendingApprovalController@approve');
+    $router->get('/approve/{token}', 'PendingApprovalController@approve');
     // Deny
-    $router->get('/deny/{token}', 'Httpfactory\Approvals\Http\Controllers\PendingApprovalController@deny');
+    $router->get('/deny/{token}', 'PendingApprovalController@deny');
 });
