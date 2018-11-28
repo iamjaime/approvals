@@ -22,6 +22,9 @@ class ApprovalServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/views' => resource_path('views/vendor/approvals'),
         ]);
+
+        //load up the routes...
+        $this->loadRoutesFrom(__DIR__ . '/Http/Routes.php');
     }
 
     /**
@@ -31,6 +34,18 @@ class ApprovalServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->approvals();
+    }
+
+    /**
+     * Handles Approval Bindings
+     */
+    protected function approvals()
+    {
+        $this->app->bind(
+            'Httpfactory\Approvals\Contracts\ApprovableConfig',
+            'Httpfactory\Approvals\Repositories\ApprovalConfiguration'
+        );
+
     }
 }
