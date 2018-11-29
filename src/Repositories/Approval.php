@@ -3,7 +3,6 @@
 namespace Httpfactory\Approvals\Repositories;
 
 use Httpfactory\Approvals\Contracts\Approvable;
-use Httpfactory\Approvals\Contracts\ApprovableConfig;
 use Httpfactory\Approvals\Events\ApprovalRequest;
 use Httpfactory\Approvals\Models\Approval as ApprovalRecord;
 use Httpfactory\Approvals\Models\Approver;
@@ -60,23 +59,14 @@ abstract class Approval implements Approvable {
     public $approvers = [];
 
 
-    /**
-     * The approval object configuration
-     * @var
-     */
-    public $config;
 
-
-
-    public function __construct(ApprovalRequester $requester, ApprovableConfig $config)
+    public function __construct(ApprovalRequester $requester)
     {
         $this->requester = $requester;
 
         if(!is_null($this->requester->currentTeam)){
             $this->team_id = $this->requester->currentTeam->id;
         }
-
-        $this->config = $config;
     }
 
 
