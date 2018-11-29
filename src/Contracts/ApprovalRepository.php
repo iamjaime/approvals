@@ -13,11 +13,11 @@ interface ApprovalRepository {
     public function approve($token);
 
     /**
-     * Handles denying an approvable object
+     * Handles declining an approvable object
      * @param $token
      * @return mixed
      */
-    public function deny($token);
+    public function decline($token);
 
 
     /**
