@@ -6,6 +6,7 @@ use Httpfactory\Approvals\Contracts\Approvable;
 use Httpfactory\Approvals\Events\ApprovalRequest;
 use Httpfactory\Approvals\Models\Approval as ApprovalRecord;
 use Httpfactory\Approvals\Models\Approver;
+use Httpfactory\Approvals\Models\ApprovalConfiguration;
 use Illuminate\Contracts\Auth\Authenticatable as ApprovalRequester;
 
 abstract class Approval implements Approvable {
@@ -109,7 +110,19 @@ abstract class Approval implements Approvable {
         $approval->description = $this->description;
         $approval->save();
 
+        $this->saveConfiguration($approval);
+
         return $approval;
+    }
+
+    /**
+     * Handles saving the default approval configurations
+     */
+    protected function saveConfiguration($approval)
+    {
+       $config = new ApprovalConfiguration();
+       $config->approval_id = $approval->id;
+       $config->save();
     }
 
     /**

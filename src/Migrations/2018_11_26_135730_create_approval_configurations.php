@@ -20,10 +20,10 @@ class CreateApprovalConfigurations extends Migration
             $table->integer('approval_id')->unsigned();
             $table->foreign('approval_id')->references('id')->on('approvals')->onDelete('cascade');
 
-            $table->string('name');
-            $table->text('description');
-            $table->integer('yes'); //number of yes's required before auto approval
-            $table->integer('no'); //number of no's required before auto denial
+            $table->string('name')->nullable();
+            $table->text('description')->nullable();
+            $table->integer('yes')->default(1); //number of yes's required before auto approval
+            $table->integer('no')->default(0); //number of no's required before auto denial
             $table->timestamps();
         });
 
