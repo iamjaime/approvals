@@ -24,7 +24,7 @@ class CreateApprovers extends Migration
             $table->integer('approver_id')->unsigned();
             $table->foreign('approver_id')->references('id')->on('users')->onDelete('cascade');
 
-            $table->enum('status', ['pending','approved', 'denied'])->default('pending');
+            $table->enum('status', ['pending','approved', 'declined'])->default('pending');
 
             $table->string('token')->nullable();
 

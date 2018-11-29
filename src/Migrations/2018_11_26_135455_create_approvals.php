@@ -34,7 +34,7 @@ class CreateApprovals extends Migration
             $table->text('description');
 
 
-            $table->enum('status', ['pending','approved', 'denied'])->default('pending');
+            $table->enum('status', ['pending','awarded', 'denied'])->default('pending');
 
             $table->timestamps();
         });

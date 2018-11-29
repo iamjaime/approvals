@@ -42,13 +42,15 @@ class ApprovalRepository implements ApprovalRepositoryInterface
     public function decline($token)
     {
         $approvalRecord = Approver::where('token', '=', $token)->with(['approval', 'approver'])->first();
-        $approvalRecord->status = 'denied';
+        $approvalRecord->status = 'declined';
         $approvalRecord->token = '';
         $approvalRecord->save();
 
         //then fire off some event which indicates approval declined
+        $approval = $approvalRecord->approval;
         $declinedBy = $approvalRecord->approver;
-        event(new ApprovalDeclined($declinedBy));
+
+        event(new ApprovalDeclined($approval, $declinedBy));
 
         return $approvalRecord;
     }
