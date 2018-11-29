@@ -2,10 +2,19 @@
 
 namespace Httpfactory\Approvals\Http\Controllers;
 
-use Httpfactory\Approvals\Models\Approver;
+use Httpfactory\Approvals\Contracts\ApprovalRepository as Approval;
 
 class PendingApprovalController extends Controller
 {
+
+    public $approval;
+
+
+    public function __construct(Approval $approval)
+    {
+        $this->approval = $approval;
+    }
+
 
     /**
      * Handles approving the Approval.
@@ -15,11 +24,10 @@ class PendingApprovalController extends Controller
      */
     public function approve($token)
     {
-        $approvalRecord = Approver::where('token', '=', $token)->first();
+        $approvalRecord = $this->approval->tokenValid($token);
         abort_unless($approvalRecord, 404);
-        $approvalRecord->status = 'approved';
-        $approvalRecord->token = '';
-        $approvalRecord->save();
+
+        $approval = $this->approval->approve($token);
 
         //now we should redirect somewhere...
         return view('approvals::approvals.approve');
@@ -33,11 +41,10 @@ class PendingApprovalController extends Controller
      */
     public function deny($token)
     {
-        $approvalRecord = Approver::where('token', '=', $token)->first();
+        $approvalRecord = $this->approval->tokenValid($token);
         abort_unless($approvalRecord, 404);
-        $approvalRecord->status = 'denied';
-        $approvalRecord->token = '';
-        $approvalRecord->save();
+
+        $denial = $this->approval->deny($token);
 
         //now we should redirect somewhere...
         return view('approvals::approvals.denied');
