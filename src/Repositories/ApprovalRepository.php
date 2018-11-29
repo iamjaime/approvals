@@ -5,7 +5,7 @@ namespace Httpfactory\Approvals\Repositories;
 use Httpfactory\Approvals\Models\Approver;
 use Httpfactory\Approvals\Contracts\ApprovalRepository as ApprovalRepositoryInterface;
 use Httpfactory\Approvals\Events\ApprovalApproved;
-use Httpfactory\Approvals\Events\ApprovalDenied;
+use Httpfactory\Approvals\Events\ApprovalDeclined;
 
 class ApprovalRepository implements ApprovalRepositoryInterface
 {
@@ -34,21 +34,21 @@ class ApprovalRepository implements ApprovalRepositoryInterface
     }
 
     /**
-     * Handles denying the Approval.
+     * Handles declining the Approval.
      *
      * @param $token
      * @return mixed
      */
-    public function deny($token)
+    public function decline($token)
     {
         $approvalRecord = Approver::where('token', '=', $token)->with(['approval', 'approver'])->first();
         $approvalRecord->status = 'denied';
         $approvalRecord->token = '';
         $approvalRecord->save();
 
-        //then fire off some event which indicates approval denied
-        $deniedBy = $approvalRecord->approver;
-        event(new ApprovalDenied($deniedBy));
+        //then fire off some event which indicates approval declined
+        $declinedBy = $approvalRecord->approver;
+        event(new ApprovalDeclined($declinedBy));
 
         return $approvalRecord;
     }
