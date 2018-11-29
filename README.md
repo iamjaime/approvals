@@ -26,14 +26,27 @@ you must run your migrations as follows
 #### Events  
 You will need to add the following events to the  `app\Providers\EventServiceProvider.php`  
   
-##### Approval Approved Event ( fires off when an approval is approved )  
-`Httpfactory\Approvals\Events\ApprovalApproved`  
+ - ApprovalRequest
+    - `Httpfactory\Approvals\Events\ApprovalRequest` 
+ 	- Fires when someone sends an approval request.
 
-##### Approval Denied Event ( fires off when an approval is denied )  
-`Httpfactory\Approvals\Events\ApprovalDenied`  
+ - ApprovalApproved
+    - `Httpfactory\Approvals\Events\ApprovalApproved`
+ 	- Fires when an "approver" approves the approval request.
+ 
+ - ApprovalDeclined
+    - `Httpfactory\Approvals\Events\ApprovalDeclined`
+ 	- Fires when an "approver" declines the approval request.
 
-##### Approval Request Event ( fires off when an approval request is sent )  
-`Httpfactory\Approvals\Events\ApprovalRequest`  
+ - ApprovalAwarded
+    - `Httpfactory\Approvals\Events\ApprovalAwarded`
+ 	- Fires when the approval configuration requirements are met and the approval is automatically awarded.
+
+ - ApprovalDenied
+    - `Httpfactory\Approvals\Events\ApprovalDenied`
+ 	- Fires when the approval configuration requirements are met and the approval is automatically denied.
+
+ 
   
 The Events should look something like the code below    
 ```
@@ -46,6 +59,14 @@ The Events should look something like the code below
                'Httpfactory\Approvals\Listeners\ApprovalApproved',
            ],
    
+           'Httpfactory\Approvals\Events\ApprovalDeclined' => [
+               'Httpfactory\Approvals\Listeners\ApprovalDeclined',
+           ],
+           
+           'Httpfactory\Approvals\Events\ApprovalAwarded' => [
+               'Httpfactory\Approvals\Listeners\ApprovalAwarded',
+           ],
+           
            'Httpfactory\Approvals\Events\ApprovalDenied' => [
                'Httpfactory\Approvals\Listeners\ApprovalDenied',
            ],
