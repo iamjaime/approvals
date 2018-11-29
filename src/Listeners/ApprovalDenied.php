@@ -32,7 +32,6 @@ class ApprovalDenied
 
         //we should be able to grab the requester's user instance like so
         $requester = $approval->requester;
-        $denier = $event->deniedBy; //the user that denied the approval
 
         //here we should probably shoot an email to the requester of the approval
         //this is just an example listener because whoever uses this package should be able
