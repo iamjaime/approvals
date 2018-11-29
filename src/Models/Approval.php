@@ -7,6 +7,7 @@ use Httpfactory\Approvals\Models\Tag;
 use Httpfactory\Approvals\Models\Approver;
 use Httpfactory\Approvals\Models\Team;
 use Httpfactory\Approvals\Models\User;
+use Httpfactory\Approvals\Models\ApprovalConfiguration as Configuration;
 
 class Approval extends Model
 {
@@ -16,6 +17,16 @@ class Approval extends Model
         'description'
     ];
 
+
+    /**
+     * This approval's configurations
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function configuration()
+    {
+        return $this->hasOne(Configuration::class);
+    }
 
     /**
      * The team associated with this approval

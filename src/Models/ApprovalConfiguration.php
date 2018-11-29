@@ -4,6 +4,7 @@ namespace Httpfactory\Approvals\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Httpfactory\Approvals\Models\Tag;
+use Httpfactory\Approvals\Models\Approval;
 
 
 class ApprovalConfiguration extends Model
@@ -22,5 +23,15 @@ class ApprovalConfiguration extends Model
     public function tags()
     {
         return $this->hasMany(Tag::class, 'approval_configurations_tags');
+    }
+
+    /**
+     * The approval that this configuration belongs to
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function approval()
+    {
+        return $this->belongsTo(Approval::class, 'approval_id');
     }
 }
