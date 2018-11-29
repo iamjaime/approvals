@@ -18,17 +18,4 @@ interface Approvable {
      */
     public function sendRequest();
 
-    /**
-     * Handles approving an approval object
-     * @param $request
-     * @return mixed
-     */
-    public function approve($request);
-
-    /**
-     * Handles denying an approvable object
-     * @param $request
-     * @return mixed
-     */
-    public function deny($request);
 }

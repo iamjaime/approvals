@@ -150,36 +150,4 @@ abstract class Approval implements Approvable {
         return $approvers;
     }
 
-
-    /**
-     * Handles approving the approval request
-     * @param $request
-     */
-    public function approve($request)
-    {
-        //The user should have clicked on the email call to action button and
-        //that will trigger this method.
-        //at this point, we will query the database and update the record to approved
-
-        //then fire off some event which indicates approval
-        //event(new ApprovalApproved($approvedBy))
-
-
-        //return approval logic
-    }
-
-    /**
-     * Handles denying the approval request
-     * @param $request
-     */
-    public function deny($request)
-    {
-        //The user should have clicked on the email call to action button and
-        //that will trigger this method.
-        //at this point, we will query the database and update the record to "denied"
-
-        //then fire off some event which indicates approval denied
-        //event(new ApprovalDenied($deniedBy))
-    }
-
 }
