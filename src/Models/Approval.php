@@ -25,7 +25,7 @@ class Approval extends Model
      */
     public function configuration()
     {
-        return $this->hasOne(Configuration::class, 'approval_configuration_id');
+        return $this->hasOne(Configuration::class, 'approval_id');
     }
 
     /**
