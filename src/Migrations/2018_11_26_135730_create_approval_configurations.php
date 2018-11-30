@@ -29,7 +29,7 @@ class CreateApprovalConfigurations extends Migration
 
         Schema::table('approvals', function (Blueprint $table) {
             //Foreign Key Referencing the id on the approvals table.
-            $table->integer('approval_configuration_id')->after('requester_id')->unsigned();
+            $table->integer('approval_configuration_id')->after('requester_id')->nullable()->unsigned();
             $table->foreign('approval_configuration_id')->references('id')->on('approval_configurations')->onDelete('cascade');
         });
 
