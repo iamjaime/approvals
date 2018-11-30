@@ -123,6 +123,9 @@ abstract class Approval implements Approvable {
        $config = new ApprovalConfiguration();
        $config->approval_id = $approval->id;
        $config->save();
+
+       $approval->approval_configuration_id = $config->id;
+       $approval->save();
     }
 
     /**
