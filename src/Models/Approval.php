@@ -21,11 +21,11 @@ class Approval extends Model
     /**
      * This approval's configurations
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
     public function configuration()
     {
-        return $this->hasOne(Configuration::class);
+        return $this->hasOne(Configuration::class, 'approval_configuration_id');
     }
 
     /**

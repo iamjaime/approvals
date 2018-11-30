@@ -27,6 +27,12 @@ class CreateApprovalConfigurations extends Migration
             $table->timestamps();
         });
 
+        Schema::table('approvals', function (Blueprint $table) {
+            //Foreign Key Referencing the id on the approvals table.
+            $table->integer('approval_configuration_id')->after('requester_id')->unsigned();
+            $table->foreign('approval_configuration_id')->references('id')->on('approval_configurations')->onDelete('cascade');
+        });
+
     }
 
     /**
@@ -38,6 +44,10 @@ class CreateApprovalConfigurations extends Migration
     {
         Schema::table('approval_configurations', function($table) {
             $table->dropForeign(['approval_id']);
+        });
+
+        Schema::table('approvals', function($table) {
+            $table->dropForeign(['approval_configuration_id']);
         });
 
 
