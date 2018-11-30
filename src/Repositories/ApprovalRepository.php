@@ -24,14 +24,14 @@ class ApprovalRepository implements ApprovalRepositoryInterface
         //The user should have clicked on the email call to action button and
         //that will trigger this method.
         //at this point, we will query the database and update the record to approved
-        $approvalRecord = Approver::where('token', '=', $token)->with(['approval.configuration', 'approver'])->first();
+        $approvalRecord = Approver::where('token', '=', $token)->with(['approval.configuration', 'user'])->first();
         $approvalRecord->status = 'approved';
         $approvalRecord->token = '';
         $approvalRecord->save();
 
         //then fire off some event which indicates approval approved
-        $approvedBy = $approvalRecord->approver;
-        event(new ApprovalApproved($approvedBy));
+        $approvedBy = $approvalRecord->user;
+        event(new ApprovalApproved($approvalRecord->approval, $approvedBy));
 
         $this->finalizeApproval($approvalRecord);
 
@@ -46,14 +46,14 @@ class ApprovalRepository implements ApprovalRepositoryInterface
      */
     public function decline($token)
     {
-        $approvalRecord = Approver::where('token', '=', $token)->with(['approval.configuration', 'approver'])->first();
+        $approvalRecord = Approver::where('token', '=', $token)->with(['approval.configuration', 'user'])->first();
         $approvalRecord->status = 'declined';
         $approvalRecord->token = '';
         $approvalRecord->save();
 
         //then fire off some event which indicates approval declined
         $approval = $approvalRecord->approval;
-        $declinedBy = $approvalRecord->approver;
+        $declinedBy = $approvalRecord->user;
 
         event(new ApprovalDeclined($approval, $declinedBy));
 
@@ -113,15 +113,15 @@ class ApprovalRepository implements ApprovalRepositoryInterface
      */
     protected function finalizeApproval($approval)
     {
-       $config = $approval->configuration();
-       $approvedRecords = Approver::where('approval_id', '=', $approval->id)->where('status', '=', 'approved')->count();
-       $declinedRecords = Approver::where('approval_id', '=', $approval->id)->where('status', '=', 'declined')->count();
+        $config = $approval->approval->configuration;
+        $approvedRecords = Approver::where('approval_id', '=', $approval->id)->where('status', '=', 'approved')->count();
+        $declinedRecords = Approver::where('approval_id', '=', $approval->id)->where('status', '=', 'declined')->count();
 
-       if( $config->yes >= $approvedRecords ){
-           $this->award($approval);
-       }elseif( $config->no >= $declinedRecords ){
-           $this->denied($approval);
-       }
+        if( $config->yes >= $approvedRecords ){
+            $this->award($approval->approval);
+        }elseif( $config->no >= $declinedRecords ){
+            $this->denied($approval->approval);
+        }
 
     }
 }
