@@ -41,7 +41,8 @@ class CreateApprovalConfigurationTags extends Migration
     public function down()
     {
         Schema::table('approval_configuration_tags', function($table) {
-            $table->dropForeign(['approval_configuration_id', 'tag_id']);
+            $table->dropForeign(['approval_configuration_id']);
+            $table->dropForeign(['tag_id']);
         });
 
         Schema::dropIfExists('approval_configuration_tags');

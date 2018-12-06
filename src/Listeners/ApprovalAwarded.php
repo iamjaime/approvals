@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 use Httpfactory\Approvals\Models\Approval;
 
-class ApprovalDenied
+class ApprovalAwarded
 {
     /**
      * Create the event listener.

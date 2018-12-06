@@ -2,7 +2,7 @@
 
 namespace Httpfactory\Approvals\Events;
 
-class ApprovalRequest
+class ApprovalAwarded
 {
 
     /**

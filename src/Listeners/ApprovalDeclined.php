@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 use Httpfactory\Approvals\Models\Approval;
 
-class ApprovalDenied
+class ApprovalDeclined
 {
     /**
      * Create the event listener.
@@ -32,6 +32,7 @@ class ApprovalDenied
 
         //we should be able to grab the requester's user instance like so
         $requester = $approval->requester;
+        $decliner = $event->declinedBy; //the user that declined the approval
 
         //here we should probably shoot an email to the requester of the approval
         //this is just an example listener because whoever uses this package should be able
