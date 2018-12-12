@@ -9,7 +9,7 @@ $router->group(['middleware' => 'web'], function ($router) {
 
 
     //Create Approval Group
-    $router->resource('group', 'GroupApprovalController');
+    $router->resource('group', 'ApproverGroupController');
 
 });
 
