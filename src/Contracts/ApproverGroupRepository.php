@@ -28,6 +28,13 @@ interface ApproverGroupRepository {
      */
     public function getById($approverGroupId);
 
+    /**
+     * Handles getting all approver groups for specific team id ( if we have a team id )
+     * @param $teamId
+     * @return mixed
+     */
+    public function getAll($teamId);
+
 
     /**
      * Handles deleting an approver group
