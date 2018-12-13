@@ -16,10 +16,11 @@ interface ApproverGroupRepository {
 
     /**
      * Handles updating an approver group
-     * @param $approverGroup  \Httpfactory\Approvals\Models\ApproverGroup   An approver group instance
+     * @param $data
+     * @param $approverGroupId
      * @return mixed
      */
-    public function update($approverGroup);
+    public function update($data, $approverGroupId);
 
     /**
      * Handles getting a specific approver group

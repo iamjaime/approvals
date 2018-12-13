@@ -3,16 +3,18 @@
 namespace Httpfactory\Approvals\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use Httpfactory\Approvals\Contracts\ApprovalRepository as Approval;
+use Httpfactory\Approvals\Contracts\ApproverGroupRepository as Approver;
+use Httpfactory\Approvals\Traits\HasTeam;
 
 class ApproverGroupController extends Controller
 {
-    public $approval;
+    use HasTeam;
 
-    public function __construct(Approval $approval)
+    public $approverGroup;
+
+    public function __construct(Approver $approverGroup)
     {
-        $this->approval = $approval;
+        $this->approverGroup = $approverGroup;
     }
 
 
@@ -23,7 +25,8 @@ class ApproverGroupController extends Controller
      */
     public function index()
     {
-        //
+        //show a list view of all groups if needed.
+        return redirect('/group/create');
     }
 
     /**
@@ -33,7 +36,7 @@ class ApproverGroupController extends Controller
      */
     public function create()
     {
-        //
+        return view('approvals::approvals.groups.create-group');
     }
 
     /**
@@ -44,7 +47,12 @@ class ApproverGroupController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $teamId = $this->hasTeam();
+        $data = $request->all(); //get all inputs from form...
+        $group = $this->approverGroup->create($data, $teamId);
+
+        //return some re-direct response...
+        return redirect('/group/create');
     }
 
     /**
@@ -55,7 +63,11 @@ class ApproverGroupController extends Controller
      */
     public function show($id)
     {
-        //
+//        $group = $this->approverGroup->getById($id);
+//        return view('approvals::approvals.groups.update-group', ['group', $group]);
+
+        $route = '/group/' . $id . '/edit';
+        return redirect($route);
     }
 
     /**
@@ -66,7 +78,9 @@ class ApproverGroupController extends Controller
      */
     public function edit($id)
     {
-        //
+        $group = $this->approverGroup->getById($id);
+        abort_unless($group, 404);
+        return view('approvals::approvals.groups.update-group', ['group' => $group]);
     }
 
     /**
@@ -78,7 +92,11 @@ class ApproverGroupController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->all(); //get all inputs from form...
+        $group = $this->approverGroup->update($data, $id);
+
+        //return some re-direct response...
+        return redirect('/group/' . $id . '/edit');
     }
 
     /**

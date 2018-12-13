@@ -20,6 +20,23 @@ class ApproverGroupRepository implements ApproverGroupRepositoryInterface
         return $approverGroup;
     }
 
+
+    /**
+     * Handles getting all approver groups for specified team
+     *
+     * @param $teamId   If teams are setup then use this else leave null
+     * @return ApproverGroup[]|\Illuminate\Database\Eloquent\Collection|mixed
+     */
+    public function getAll($teamId)
+    {
+        if($teamId){
+            $approverGroups = ApproverGroup::where('team_id', $teamId)->get();
+        }else{
+            $approverGroups = ApproverGroup::all();
+        }
+        return $approverGroups;
+    }
+
     /**
      * Handles creating an Approval Group
      *
@@ -41,14 +58,15 @@ class ApproverGroupRepository implements ApproverGroupRepositoryInterface
 
 
     /**
-     * Updates an Approver Group
-     *
-     * @param ApproverGroup $approverGroup
-     * @return mixed|void
+     * Handles updating an approver group
+     * @param $data
+     * @param $approverGroupId
+     * @return mixed
      */
-    public function update($approverGroup)
+    public function update($data, $approverGroupId)
     {
-        $group = ApproverGroup::find($approverGroup->id);
+        $group = ApproverGroup::find($approverGroupId);
+        $group->fill($data);
         $group->save();
     }
 
