@@ -2,6 +2,7 @@
 
 namespace Httpfactory\Approvals\Http\Controllers;
 
+use Httpfactory\Approvals\Models\User;
 use Illuminate\Http\Request;
 use Httpfactory\Approvals\Contracts\ApproverGroupRepository as Approver;
 use Httpfactory\Approvals\Traits\HasTeam;
@@ -109,4 +110,34 @@ class ApproverGroupController extends Controller
     {
         //
     }
+
+
+    /**
+     * Handles attaching users to an approver group
+     *
+     * @param Request $request
+     */
+    public function attach(Request $request)
+    {
+        //an array of user objects to attach....
+        //then do $this->approverGroup->attach();
+//        $groupId = 1;
+//        $users = [
+//            new User,
+//            new User
+//        ];
+//        $this->approverGroup->attachUsers($groupId, $users, $this->hasTeam());
+    }
+
+
+    /**
+     * Handles attaching users to an approver group
+     *
+     * @param Request $request
+     */
+    public function detach(Request $request)
+    {
+
+    }
+
 }

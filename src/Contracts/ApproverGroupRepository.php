@@ -44,4 +44,22 @@ interface ApproverGroupRepository {
      */
     public function delete($approverGroup);
 
+
+    /**
+     * Handles attaching Users to a specific approver group
+     *
+     * @param $approverGroupId
+     * @param $users
+     * @param $teamId
+     */
+    public function attachUsers($approverGroupId, $users, $teamId);
+
+    /**
+     * Handles detaching Users from a specific approver group
+     *
+     * @param $approverGroupId
+     * @param $users
+     * @param $teamId
+     */
+    public function detachUsers($approverGroupId, $users, $teamId);
 }

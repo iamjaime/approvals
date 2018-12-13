@@ -4,9 +4,22 @@ namespace Httpfactory\Approvals\Repositories;
 
 use Httpfactory\Approvals\Contracts\ApproverGroupRepository as ApproverGroupRepositoryInterface;
 use Httpfactory\Approvals\Models\ApproverGroup;
+use Httpfactory\Approvals\Models\ApproverGroupUser;
 
 class ApproverGroupRepository implements ApproverGroupRepositoryInterface
 {
+
+    public $approverGroup;
+
+    public $approverGroupUser;
+
+
+    public function __construct(ApproverGroup $approverGroup, ApproverGroupUser $approverGroupUser)
+    {
+        $this->approverGroup = $approverGroup;
+        $this->approverGroupUser = $approverGroupUser;
+    }
+
 
     /**
      * Gets the Approver Group By Id
@@ -84,6 +97,33 @@ class ApproverGroupRepository implements ApproverGroupRepositoryInterface
         $group->delete();
 
         return true;
+    }
+
+
+    /**
+     * Handles attaching Users to a specific approver group
+     *
+     * @param $approverGroupId
+     * @param $users
+     * @param $teamId
+     */
+    public function attachUsers($approverGroupId, $users, $teamId)
+    {
+        $group = $this->approverGroup->where('team_id', '=', $teamId)->where('id', '=', $approverGroupId)->first();
+        $group->users()->saveMany($users);
+    }
+
+    /**
+     * Handles detaching Users from a specific approver group
+     *
+     * @param $approverGroupId
+     * @param $users
+     * @param $teamId
+     */
+    public function detachUsers($approverGroupId, $users, $teamId)
+    {
+//        $group = $this->approverGroup->where('team_id', '=', $teamId)->where('id', '=', $approverGroupId)->first();
+//        $group->users()->saveMany($users);
     }
 
 }
