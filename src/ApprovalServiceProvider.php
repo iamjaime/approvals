@@ -42,7 +42,7 @@ class ApprovalServiceProvider extends ServiceProvider
             Route::group([
                 'namespace' => 'Httpfactory\Approvals\Http\Controllers'],
                 function ($router) {
-                    require __DIR__.'/Http/routes.php';
+                    require __DIR__.'/Http/Routes.php';
                 }
             );
         }
