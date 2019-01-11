@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ApproverGroups extends Migration
+class ApprovalLevels extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class ApproverGroups extends Migration
      */
     public function up()
     {
-        Schema::create('approver_groups', function (Blueprint $table) {
+        Schema::create('approval_levels', function (Blueprint $table) {
             $table->increments('id');
 
             if(Schema::hasTable('teams')){
@@ -24,11 +24,17 @@ class ApproverGroups extends Migration
             }
 
             $table->string('name');
+
             $table->text('description');
+
+            $table->integer('required_yes_count');
+
+            $table->integer('required_no_count');
+
             $table->timestamps();
         });
 
-        Schema::create('approver_group_users', function (Blueprint $table) {
+        Schema::create('approval_level_users', function (Blueprint $table) {
             $table->increments('id');
 
             if(Schema::hasTable('teams')){
@@ -42,17 +48,17 @@ class ApproverGroups extends Migration
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
-            //Approver group id
-            $table->integer('approver_group_id')->unsigned();
-            $table->foreign('approver_group_id')->references('id')->on('approver_groups')->onDelete('cascade');
+            //Approver level id
+            $table->integer('approval_level_id')->unsigned();
+            $table->foreign('approval_level_id')->references('id')->on('approval_levels')->onDelete('cascade');
 
-            //clearance level....
-            $table->integer('level')->unsigned()->nullable();
+            //clearance level order number (used for hiearchy)....
+            $table->integer('level_order')->unsigned()->nullable();
 
             $table->timestamps();
         });
 
-        Schema::create('approver_group_requests', function (Blueprint $table) {
+        Schema::create('approval_level_requests', function (Blueprint $table) {
             $table->increments('id');
 
             if(Schema::hasTable('teams')){
@@ -62,17 +68,14 @@ class ApproverGroups extends Migration
                 $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
             }
 
-            //Foreign Key Referencing the id on the approvals table.
-            $table->integer('approval_id')->unsigned();
-            $table->foreign('approval_id')->references('id')->on('approvals')->onDelete('cascade');
+            //Foreign Key Referencing the id on the approval_elements table.
+            $table->integer('approval_element_id')->unsigned();
+            $table->foreign('approval_element_id')->references('id')->on('approval_elements')->onDelete('cascade');
 
-            //Foreign Key Referencing the id on the approvers table.
-            $table->integer('approver_group_id')->unsigned();
-            $table->foreign('approver_group_id')->references('id')->on('approver_groups')->onDelete('cascade');
+            //Foreign Key Referencing the id on the approval_levels table.
+            $table->integer('approval_level_id')->unsigned();
+            $table->foreign('approval_level_id')->references('id')->on('approval_levels')->onDelete('cascade');
 
-            //user in that group ( then we can grab their clearance level in the event that we have clearance rules )
-            $table->integer('approver_group_user_id')->unsigned();
-            $table->foreign('approver_group_user_id')->references('id')->on('approver_group_users')->onDelete('cascade');
 
             $table->enum('status', ['pending','approved', 'declined'])->default('pending');
 
@@ -82,9 +85,9 @@ class ApproverGroups extends Migration
         });
 
 
-        Schema::table('approvals', function (Blueprint $table){
-            //if the approval is of type quick then we use the "approvals" table.
-            //if it's of type "group" then we use the approver_group_requests table
+        Schema::table('approval_requests', function (Blueprint $table){
+            //if the approval is of type quick then we use the "approval_requests" table.
+            //if it's of type "group" then we use the approval_level_requests table
             $table->enum('type', ['quick', 'group'])->after('status')->nullable();
         });
 
@@ -97,36 +100,35 @@ class ApproverGroups extends Migration
      */
     public function down()
     {
-        Schema::table('approvals', function($table) {
+        Schema::table('approval_requests', function($table) {
             $table->dropColumn('type');
 
         });
 
 
-        Schema::table('approver_group_requests', function($table) {
+        Schema::table('approval_level_requests', function($table) {
 
             if(Schema::hasTable('teams')){
                 $table->dropForeign(['team_id']);
             }
 
-            $table->dropForeign(['approval_id']);
-            $table->dropForeign(['approver_group_id']);
-            $table->dropForeign(['approver_group_user_id']);
+            $table->dropForeign(['approval_element_id']);
+            $table->dropForeign(['approval_level_id']);
         });
 
 
-        Schema::table('approver_group_users', function($table) {
+        Schema::table('approval_level_users', function($table) {
 
             if(Schema::hasTable('teams')){
                 $table->dropForeign(['team_id']);
             }
 
             $table->dropForeign(['user_id']);
-            $table->dropForeign(['approver_group_id']);
+            $table->dropForeign(['approval_level_id']);
         });
 
 
-        Schema::table('approver_groups', function($table) {
+        Schema::table('approval_levels', function($table) {
 
             if(Schema::hasTable('teams')){
                 $table->dropForeign(['team_id']);
@@ -134,8 +136,8 @@ class ApproverGroups extends Migration
         });
 
 
-        Schema::dropIfExists('approver_group_requests');
-        Schema::dropIfExists('approver_group_users');
-        Schema::dropIfExists('approver_groups');
+        Schema::dropIfExists('approval_level_requests');
+        Schema::dropIfExists('approval_level_users');
+        Schema::dropIfExists('approval_levels');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateApprovals extends Migration
+class CreateApprovalRequests extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateApprovals extends Migration
      */
     public function up()
     {
-        Schema::create('approvals', function (Blueprint $table) {
+        Schema::create('approval_requests', function (Blueprint $table) {
             $table->increments('id');
 
 
@@ -30,8 +30,9 @@ class CreateApprovals extends Migration
             $table->foreign('requester_id')->references('id')->on('users')->onDelete('cascade');
 
 
-            $table->string('name');
-            $table->text('description');
+            //Foreign Key Referencing the id on the approval processes table.
+            $table->integer('approval_process_id')->unsigned();
+            $table->foreign('approval_process_id')->references('id')->on('approval_processes')->onDelete('cascade');
 
 
             $table->enum('status', ['pending','awarded', 'denied'])->default('pending');
@@ -47,14 +48,15 @@ class CreateApprovals extends Migration
      */
     public function down()
     {
-        Schema::table('approvals', function($table) {
+        Schema::table('approval_requests', function($table) {
 
             if(Schema::hasTable('teams')){
                 $table->dropForeign(['team_id']);
             }
 
             $table->dropForeign(['requester_id']);
+            $table->dropForeign(['approval_process_id']);
         });
-        Schema::dropIfExists('approvals');
+        Schema::dropIfExists('approval_requests');
     }
 }
