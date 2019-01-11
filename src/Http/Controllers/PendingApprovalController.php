@@ -2,7 +2,7 @@
 
 namespace Httpfactory\Approvals\Http\Controllers;
 
-use Httpfactory\Approvals\Contracts\ApprovalRepository as Approval;
+use Httpfactory\Approvals\Contracts\ApprovalRequestRepository as Approval;
 
 class PendingApprovalController extends Controller
 {

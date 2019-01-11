@@ -4,17 +4,17 @@ namespace Httpfactory\Approvals\Repositories;
 
 use Httpfactory\Approvals\Events\ApprovalAwarded;
 use Httpfactory\Approvals\Listeners\ApprovalDenied;
-use Httpfactory\Approvals\Models\Approver;
+use Httpfactory\Approvals\Models\ApprovalLevelRequest as Approver;
 use Httpfactory\Approvals\Models\Approval;
-use Httpfactory\Approvals\Contracts\ApprovalRepository as ApprovalRepositoryInterface;
+use Httpfactory\Approvals\Contracts\ApprovalRequestRepository as ApprovalRepositoryInterface;
 use Httpfactory\Approvals\Events\ApprovalApproved;
 use Httpfactory\Approvals\Events\ApprovalDeclined;
 
-class ApprovalRepository implements ApprovalRepositoryInterface
+class ApprovalRequestRepository implements ApprovalRepositoryInterface
 {
 
     /**
-     * Handles approving the Approval.
+     * Handles approving the Approval Request.
      *
      * @param $token
      * @return mixed
@@ -39,7 +39,7 @@ class ApprovalRepository implements ApprovalRepositoryInterface
     }
 
     /**
-     * Handles declining the Approval.
+     * Handles declining the Approval Request.
      *
      * @param $token
      * @return mixed
@@ -80,7 +80,7 @@ class ApprovalRepository implements ApprovalRepositoryInterface
 
 
     /**
-     * Handle awarding the approval
+     * Handle awarding the approval request
      * @param $approval
      */
     protected function award($approval)
@@ -93,7 +93,7 @@ class ApprovalRepository implements ApprovalRepositoryInterface
     }
 
     /**
-     * Handle denying the approval
+     * Handle denying the approval request
      * @param $approval
      */
     protected function denied($approval)
@@ -107,7 +107,7 @@ class ApprovalRepository implements ApprovalRepositoryInterface
 
 
     /**
-     * Handles finalizing the approval
+     * Handles finalizing the approval request
      *
      * @param $approval
      */

@@ -3,7 +3,7 @@
 namespace Httpfactory\Approvals\Contracts;
 
 
-interface ApproverGroupRepository {
+interface ApprovalLevelRepository {
 
     /**
      * Handles creating an approver group

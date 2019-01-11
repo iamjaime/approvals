@@ -3,7 +3,7 @@
 namespace Httpfactory\Approvals\Contracts;
 
 
-interface ApprovalRepository {
+interface ApprovalRequestRepository {
 
     /**
      * Handles approving an approval object

@@ -69,8 +69,8 @@ class ApprovalServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            'Httpfactory\Approvals\Contracts\ApprovalRepository',
-            'Httpfactory\Approvals\Repositories\ApprovalRepository'
+            'Httpfactory\Approvals\Contracts\ApprovalRequestRepository',
+            'Httpfactory\Approvals\Repositories\ApprovalRequestRepository'
         );
 
         $this->app->bind(
