@@ -4,12 +4,10 @@ namespace Httpfactory\Approvals\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Httpfactory\Approvals\Models\Tag;
-use Httpfactory\Approvals\Models\Approver;
 use Httpfactory\Approvals\Models\Team;
 use Httpfactory\Approvals\Models\User;
-use Httpfactory\Approvals\Models\ApprovalConfiguration as Configuration;
 
-class Approval extends Model
+class ApprovalRequest extends Model
 {
 
     protected $fillable = [
@@ -17,16 +15,6 @@ class Approval extends Model
         'description'
     ];
 
-
-    /**
-     * This approval's configurations
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\hasOne
-     */
-    public function configuration()
-    {
-        return $this->hasOne(Configuration::class, 'approval_id');
-    }
 
     /**
      * The team associated with this approval
@@ -57,16 +45,6 @@ class Approval extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'approval_tags');
-    }
-
-    /**
-     * The approvers associated with this approval
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function approvers()
-    {
-        return $this->hasMany(Approver::class);
     }
 
 }
