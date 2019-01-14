@@ -4,7 +4,7 @@ namespace Httpfactory\Approvals\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ApproverGroupRequest extends Model
+class ApprovalLevelRequest extends Model
 {
     //
 }

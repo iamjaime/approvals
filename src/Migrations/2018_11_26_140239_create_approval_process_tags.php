@@ -1,15 +1,15 @@
 <?php
 
 /**
- * This serves as a pivot table between "approvals" and "tags"
- * because an "approval" can have many tags
+ * This serves as a pivot table between "approval_processes" and "tags"
+ * because an "approval_process" can have many tags
  */
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateApprovalTags extends Migration
+class CreateApprovalProcessTags extends Migration
 {
     /**
      * Run the migrations.
@@ -18,12 +18,12 @@ class CreateApprovalTags extends Migration
      */
     public function up()
     {
-        Schema::create('approval_tags', function (Blueprint $table) {
+        Schema::create('approval_process_tags', function (Blueprint $table) {
             $table->increments('id');
 
-            //Foreign Key Referencing the id on the approvals table.
-            $table->integer('approval_id')->unsigned();
-            $table->foreign('approval_id')->references('id')->on('approvals')->onDelete('cascade');
+            //Foreign Key Referencing the id on the approval processes table.
+            $table->integer('approval_process_id')->unsigned();
+            $table->foreign('approval_process_id')->references('id')->on('approval_processes')->onDelete('cascade');
 
             //Foreign Key Referencing the id on the tags table.
             $table->integer('tag_id')->unsigned();
@@ -41,11 +41,11 @@ class CreateApprovalTags extends Migration
     public function down()
     {
 
-        Schema::table('approval_tags', function($table) {
-            $table->dropForeign(['approval_id']);
+        Schema::table('approval_process_tags', function($table) {
+            $table->dropForeign(['approval_process_id']);
             $table->dropForeign(['tag_id']);
         });
 
-        Schema::dropIfExists('approval_tags');
+        Schema::dropIfExists('approval_process_tags');
     }
 }

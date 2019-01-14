@@ -4,9 +4,9 @@ namespace Httpfactory\Approvals\Repositories;
 
 use Httpfactory\Approvals\Contracts\Approvable;
 use Httpfactory\Approvals\Events\ApprovalRequest;
-use Httpfactory\Approvals\Models\Approval as ApprovalRecord;
-use Httpfactory\Approvals\Models\Approver;
-use Httpfactory\Approvals\Models\ApprovalConfiguration;
+use Httpfactory\Approvals\Models\ApprovalRequest as ApprovalRecord;
+use Httpfactory\Approvals\Models\ApprovalLevelRequest as Approver;
+use Httpfactory\Approvals\Models\ApprovalProcess;
 use Illuminate\Contracts\Auth\Authenticatable as ApprovalRequester;
 
 abstract class Approval implements Approvable {
@@ -18,16 +18,10 @@ abstract class Approval implements Approvable {
     protected $id;
 
     /**
-     * Approval object name
+     * The approval process
      * @var
      */
-    public $name;
-
-    /**
-     * Approval object description
-     * @var
-     */
-    public $description;
+    public $approval_process;
 
     /**
      * Array of user instances that we require approval from
@@ -61,9 +55,10 @@ abstract class Approval implements Approvable {
 
 
 
-    public function __construct(ApprovalRequester $requester)
+    public function __construct(ApprovalRequester $requester, ApprovalProcess $approvalProcess)
     {
         $this->requester = $requester;
+        $this->approval_process = $approvalProcess;
 
         if(!is_null($this->requester->currentTeam)){
             $this->team_id = $this->requester->currentTeam->id;
@@ -87,7 +82,7 @@ abstract class Approval implements Approvable {
      */
     public function sendRequest()
     {
-        $approval = $this->saveApproval();
+        $approval = $this->saveApprovalRequest();
         $this->id = $approval->id;
         $this->approvers = $this->saveApprovers();
 
@@ -97,36 +92,23 @@ abstract class Approval implements Approvable {
 
 
     /**
-     * Handles saving the approval object
+     * Handles saving the approval request object
      */
-    protected function saveApproval()
+    protected function saveApprovalRequest()
     {
         $approval = new ApprovalRecord();
         $approval->requester_id = $this->requester->id;
+        $approval->approval_process_id = $this->approval_process->id;
+
         if(!is_null($this->team_id)){
             $approval->team_id = $this->team_id;
         }
-        $approval->name = $this->name;
-        $approval->description = $this->description;
-        $approval->save();
 
-        $this->saveConfiguration($approval);
+        $approval->save();
 
         return $approval;
     }
 
-    /**
-     * Handles saving the default approval configurations
-     */
-    protected function saveConfiguration($approval)
-    {
-       $config = new ApprovalConfiguration();
-       $config->approval_id = $approval->id;
-       $config->save();
-
-       $approval->approval_configuration_id = $config->id;
-       $approval->save();
-    }
 
     /**
      * Handles saving the approvers
@@ -139,8 +121,9 @@ abstract class Approval implements Approvable {
         foreach($this->from as $approver){
 
             $approverRecord = new Approver();
-            $approverRecord->approval_id = $this->id;
-            $approverRecord->approver_id = $approver->id;
+            $approverRecord->approval_element_id = $this->id;
+            $approverRecord->approval_level_id = $this->id;
+            $approverRecord->approver_level_user_id = $approver->id;
             $approverRecord->status = 'pending';
             $approverRecord->token = str_random(60);
             $approverRecord->save();
