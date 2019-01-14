@@ -73,6 +73,10 @@ class ApprovalLevels extends Migration
                 $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
             }
 
+            //Foreign Key Referencing the id on the approval_process table.
+            $table->integer('approval_process_id')->unsigned();
+            $table->foreign('approval_process_id')->references('id')->on('approval_processes')->onDelete('cascade');
+
             //Foreign Key Referencing the id on the approval_elements table.
             $table->integer('approval_element_id')->unsigned();
             $table->foreign('approval_element_id')->references('id')->on('approval_elements')->onDelete('cascade');
@@ -111,7 +115,6 @@ class ApprovalLevels extends Migration
     {
         Schema::table('approval_requests', function($table) {
             $table->dropColumn('type');
-
         });
 
 
@@ -124,6 +127,7 @@ class ApprovalLevels extends Migration
             $table->dropForeign(['approval_element_id']);
             $table->dropForeign(['approval_level_id']);
             $table->dropForeign(['approval_level_user_id']);
+            $table->dropForeign(['approval_process_id']);
         });
 
 
