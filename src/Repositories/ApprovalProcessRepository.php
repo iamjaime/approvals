@@ -50,6 +50,11 @@ class ApprovalProcessRepository implements ApprovalProcessRepositoryInterface
         if($teamId){
             $approvalProcess->team_id = $teamId;
         }
+
+        if($data['approval_element_id']){
+            $approvalProcess->approval_element_id = $data['approval_element_id'];
+        }
+
         $approvalProcess->fill($data);
         $approvalProcess->save();
 
@@ -65,9 +70,14 @@ class ApprovalProcessRepository implements ApprovalProcessRepositoryInterface
      */
     public function update($data, $approvalProcessId)
     {
-        $group = ApprovalProcess::find($approvalProcessId);
-        $group->fill($data);
-        $group->save();
+        $process = ApprovalProcess::find($approvalProcessId);
+
+        if($data['approval_element_id']){
+            $process->approval_element_id = $data['approval_element_id'];
+        }
+
+        $process->fill($data);
+        $process->save();
     }
 
 
