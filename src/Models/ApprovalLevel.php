@@ -11,6 +11,9 @@ class ApprovalLevel extends Model
     protected $fillable = [
       'name',
       'description',
+      'required_yes_count',
+      'required_no_count',
+      'level_order'
     ];
 
 
