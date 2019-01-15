@@ -8,8 +8,10 @@ use Httpfactory\Approvals\Models\ApprovalLevelRequest;
 
 class ApprovalLevelUser extends Model
 {
+
     protected $fillable = [
-        'level_order'
+        'user_id',
+        'team_id'
     ];
 
 
