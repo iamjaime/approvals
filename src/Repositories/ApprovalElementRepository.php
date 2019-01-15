@@ -41,15 +41,18 @@ class ApprovalElementRepository implements ApprovalElementRepositoryInterface
      * Handles creating an Approval Element
      *
      * @param $data
+     * @param $approval_process_id
      * @param $teamId
      * @return ApprovalElement|mixed
      */
-    public function create($data, $teamId)
+    public function create($data, $approval_process_id, $teamId)
     {
         $approvalElement = new ApprovalElement();
+
         if($teamId){
             $approvalElement->team_id = $teamId;
         }
+        $approvalElement->approval_process_id = $approval_process_id;
         $approvalElement->fill($data);
         $approvalElement->save();
 
