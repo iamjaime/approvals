@@ -43,15 +43,17 @@ class ApprovalLevelRepository implements ApprovalLevelRepositoryInterface
      * Handles creating an Approval Level
      *
      * @param $data
+     * @param $approval_element_id
      * @param $teamId
      * @return ApprovalLevel|mixed
      */
-    public function create($data, $teamId)
+    public function create($data, $approval_element_id, $teamId)
     {
         $approvalLevel = new ApprovalLevel();
         if($teamId){
             $approvalLevel->team_id = $teamId;
         }
+        $approvalLevel->approval_element_id = $approval_element_id;
         $approvalLevel->fill($data);
         $approvalLevel->save();
 
