@@ -8,10 +8,11 @@ interface ApprovalElementRepository {
     /**
      * Handles creating an approval element
      * @param $data
+     * @param $approval_process_id
      * @param $teamId
      * @return mixed
      */
-    public function create($data, $teamId);
+    public function create($data, $approval_process_id, $teamId);
 
 
     /**
