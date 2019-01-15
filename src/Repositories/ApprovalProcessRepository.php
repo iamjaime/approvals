@@ -8,15 +8,6 @@ use Httpfactory\Approvals\Models\ApprovalProcess;
 class ApprovalProcessRepository implements ApprovalProcessRepositoryInterface
 {
 
-    public $approvalProcess;
-
-
-    public function __construct(ApprovalProcess $approvalProcess)
-    {
-        $this->approvalProcess = $approvalProcess;
-    }
-
-
     /**
      * Gets the Approval Process By Id
      *

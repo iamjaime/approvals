@@ -9,17 +9,6 @@ use Httpfactory\Approvals\Models\ApprovalLevelUser;
 class ApprovalLevelRepository implements ApprovalLevelRepositoryInterface
 {
 
-    public $approvalLevel;
-
-    public $approvalLevelUser;
-
-
-    public function __construct(ApprovalLevel $approvalLevel, ApprovalLevelUser $approvalLevelUser)
-    {
-        $this->approvalLevel = $approvalLevel;
-        $this->approvalLevelUser = $approvalLevelUser;
-    }
-
 
     /**
      * Gets the Approval Level By Id
@@ -109,7 +98,7 @@ class ApprovalLevelRepository implements ApprovalLevelRepositoryInterface
      */
     public function attachUsers($approvalLevelId, $users, $teamId)
     {
-        $level = $this->approvalLevel->where('team_id', '=', $teamId)->where('id', '=', $approvalLevelId)->first();
+        $level = ApprovalLevel::where('team_id', '=', $teamId)->where('id', '=', $approvalLevelId)->first();
         $level->users()->saveMany($users);
     }
 

@@ -8,15 +8,6 @@ use Httpfactory\Approvals\Models\ApprovalElement;
 class ApprovalElementRepository implements ApprovalElementRepositoryInterface
 {
 
-    public $approvalElement;
-
-
-    public function __construct(ApprovalElement $approvalElement)
-    {
-        $this->approvalElement = $approvalElement;
-    }
-
-
     /**
      * Gets the Approval Element By Id
      *

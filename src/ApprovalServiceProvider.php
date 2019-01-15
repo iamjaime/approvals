@@ -63,19 +63,25 @@ class ApprovalServiceProvider extends ServiceProvider
      */
     protected function approvals()
     {
+
         $this->app->bind(
-            'Httpfactory\Approvals\Contracts\ApprovableConfig',
-            'Httpfactory\Approvals\Repositories\ApprovalConfiguration'
+            'Httpfactory\Approvals\Contracts\ApprovalElementRepository',
+            'Httpfactory\Approvals\Repositories\ApprovalElementRepository'
+        );
+
+        $this->app->bind(
+            'Httpfactory\Approvals\Contracts\ApprovalLevelRepository',
+            'Httpfactory\Approvals\Repositories\ApprovalLevelRepository'
+        );
+
+        $this->app->bind(
+            'Httpfactory\Approvals\Contracts\ApprovalProcessRepository',
+            'Httpfactory\Approvals\Repositories\ApprovalProcessRepository'
         );
 
         $this->app->bind(
             'Httpfactory\Approvals\Contracts\ApprovalRequestRepository',
             'Httpfactory\Approvals\Repositories\ApprovalRequestRepository'
-        );
-
-        $this->app->bind(
-            'Httpfactory\Approvals\Contracts\ApproverGroupRepository',
-            'Httpfactory\Approvals\Repositories\ApproverGroupRepository'
         );
 
     }
