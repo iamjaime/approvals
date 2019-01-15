@@ -51,10 +51,6 @@ class ApprovalProcessRepository implements ApprovalProcessRepositoryInterface
             $approvalProcess->team_id = $teamId;
         }
 
-        if($data['approval_element_id']){
-            $approvalProcess->approval_element_id = $data['approval_element_id'];
-        }
-
         $approvalProcess->fill($data);
         $approvalProcess->save();
 
