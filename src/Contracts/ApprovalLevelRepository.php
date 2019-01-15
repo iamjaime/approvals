@@ -8,10 +8,11 @@ interface ApprovalLevelRepository {
     /**
      * Handles creating an approver group
      * @param $data
+     * @param $approval_element_id
      * @param $teamId
      * @return mixed
      */
-    public function create($data, $teamId);
+    public function create($data, $approval_element_id,  $teamId);
 
 
     /**
