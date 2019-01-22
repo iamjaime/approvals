@@ -30,7 +30,9 @@ class ApprovalProcessRepository implements ApprovalProcessRepositoryInterface
     public function getAll($teamId)
     {
         if($teamId){
-            $approvalProcesses = ApprovalProcess::where('team_id', $teamId)->get();
+            $approvalProcesses = ApprovalProcess::where('team_id', $teamId)->with(['approvalElement.levels' => function ($query) {
+                $query->orderBy('level_order', 'asc');
+            }])->get();
         }else{
             $approvalProcesses = ApprovalProcess::all();
         }
