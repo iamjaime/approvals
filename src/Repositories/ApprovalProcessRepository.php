@@ -16,7 +16,7 @@ class ApprovalProcessRepository implements ApprovalProcessRepositoryInterface
      */
     public function getById($approvalProcessId)
     {
-        $approvalProcess = ApprovalProcess::find($approvalProcessId);
+        $approvalProcess = ApprovalProcess::where('id', $approvalProcessId)->with(['approvalElement.levels.users'])->first();
         return $approvalProcess;
     }
 

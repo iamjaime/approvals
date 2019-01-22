@@ -7,74 +7,47 @@ use Httpfactory\Approvals\Events\ApprovalRequest;
 use Httpfactory\Approvals\Models\ApprovalRequest as ApprovalRecord;
 use Httpfactory\Approvals\Models\ApprovalLevelRequest as Approver;
 use Httpfactory\Approvals\Models\ApprovalProcess;
+use Httpfactory\Approvals\Models\User;
+
 use Illuminate\Contracts\Auth\Authenticatable as ApprovalRequester;
 
 abstract class Approval implements Approvable {
 
     /**
-     * Approval object id
-     * @var
-     */
-    protected $id;
-
-    /**
-     * The approval process
-     * @var
-     */
-    public $approval_process;
-
-    /**
-     * Array of user instances that we require approval from
-     * @var
-     */
-    public $from;
-
-    /**
-     * Number of approvals needed
-     * @var int
-     */
-    public $approvalsNeeded = 1; //by default
-
-    /**
-     * The User Instance that is requesting the approval
      * @var ApprovalRequester
      */
     public $requester;
 
     /**
-     * The Team Id that is requesting the approval
-     * @var
+     * @var ApprovalProcess
      */
-    public $team_id = null;
+    public $approvalProcess;
 
     /**
-     * The approver records
-     * @var
+     * @var Team
      */
-    public $approvers = [];
+    public $team;
 
+    /**
+     * The levels associated with this approval.
+     *
+     * @var array of \Httpfactory\Approvals\Models\AppprovalLevel Objects
+     */
+    public $levels;
 
 
     public function __construct(ApprovalRequester $requester, ApprovalProcess $approvalProcess)
     {
         $this->requester = $requester;
-        $this->approval_process = $approvalProcess;
+        $this->approvalProcess = $approvalProcess;
+        $this->levels = $this->approvalProcess->approvalElement->levels;
 
         if(!is_null($this->requester->currentTeam)){
-            $this->team_id = $this->requester->currentTeam->id;
+            $this->team = $this->requester->currentTeam;
         }
-    }
 
-
-    /**
-     * The user(s) we are requesting approval from
-     * @param $approvers  array  The approver(s)
-     * @return $this
-     */
-    public function from($approvers)
-    {
-        $this->from = $approvers;
-        return $this;
+        $this->getLevelUsers();
+        dd($this);
     }
 
     /**
@@ -82,58 +55,30 @@ abstract class Approval implements Approvable {
      */
     public function sendRequest()
     {
-        $approval = $this->saveApprovalRequest();
-        $this->id = $approval->id;
-        $this->approvers = $this->saveApprovers();
-
         //fires an event
         event(new ApprovalRequest($this));
     }
 
 
     /**
-     * Handles saving the approval request object
+     * Handles getting the level user ids and converting them into
+     * User objects
      */
-    protected function saveApprovalRequest()
+    private function getLevelUsers()
     {
-        $approval = new ApprovalRecord();
-        $approval->requester_id = $this->requester->id;
-        $approval->approval_process_id = $this->approval_process->id;
+        $userIds = [];
+        foreach($this->levels as $level){
 
-        if(!is_null($this->team_id)){
-            $approval->team_id = $this->team_id;
+            foreach($level->users as $user){
+                array_push($userIds, $user->user_id);
+            }
+
+            $users = User::whereIn('id', $userIds)->get();
+            $level->users = $users;
+            $userIds = [];
         }
 
-        $approval->save();
-
-        return $approval;
     }
 
-
-    /**
-     * Handles saving the approvers
-     * @return array
-     */
-    protected function saveApprovers()
-    {
-        $approvers = [];
-
-        foreach($this->from as $approver){
-
-            $approverRecord = new Approver();
-            $approverRecord->approval_element_id = $this->id;
-            $approverRecord->approval_level_id = $this->id;
-            $approverRecord->approver_level_user_id = $approver->id;
-            $approverRecord->status = 'pending';
-            $approverRecord->token = str_random(60);
-            $approverRecord->save();
-
-            $approverRecord->email = $approver->email;
-
-            array_push($approvers, $approverRecord);
-        }
-
-        return $approvers;
-    }
 
 }
