@@ -99,9 +99,10 @@ class ApprovalLevels extends Migration
 
 
         Schema::table('approval_requests', function (Blueprint $table){
-            //if the approval is of type quick then we use the "approval_requests" table.
-            //if it's of type "group" then we use the approval_level_requests table
-            $table->enum('type', ['quick', 'group'])->after('status')->nullable();
+
+            //Foreign Key Referencing the id on the approval levels table.
+            $table->integer('current_assessment_level_id')->unsigned()->after('approval_process_id')->nullable();
+            $table->foreign('current_assessment_level_id')->references('id')->on('approval_levels')->onDelete('cascade');
         });
 
     }
@@ -114,7 +115,8 @@ class ApprovalLevels extends Migration
     public function down()
     {
         Schema::table('approval_requests', function($table) {
-            $table->dropColumn('type');
+            $table->dropForeign(['current_assessment_level_id']);
+            $table->dropColumn('current_assessment_level_id');
         });
 
 
