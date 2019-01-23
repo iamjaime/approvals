@@ -74,6 +74,10 @@ class ApprovalLevels extends Migration
             }
 
             //Foreign Key Referencing the id on the approval_process table.
+            $table->integer('approval_request_id')->unsigned();
+            $table->foreign('approval_request_id')->references('id')->on('approval_requests')->onDelete('cascade');
+
+            //Foreign Key Referencing the id on the approval_process table.
             $table->integer('approval_process_id')->unsigned();
             $table->foreign('approval_process_id')->references('id')->on('approval_processes')->onDelete('cascade');
 
@@ -85,9 +89,9 @@ class ApprovalLevels extends Migration
             $table->integer('approval_level_id')->unsigned();
             $table->foreign('approval_level_id')->references('id')->on('approval_levels')->onDelete('cascade');
 
-            //Foreign Key Referencing the id on the approval_level_users table.
-            $table->integer('approval_level_user_id')->unsigned();
-            $table->foreign('approval_level_user_id')->references('id')->on('approval_level_users')->onDelete('cascade');
+            //Foreign Key Referencing the id on the users table.
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
 
             $table->enum('status', ['pending','approved', 'declined'])->default('pending');
@@ -103,6 +107,8 @@ class ApprovalLevels extends Migration
             //Foreign Key Referencing the id on the approval levels table.
             $table->integer('current_assessment_level_id')->unsigned()->after('approval_process_id')->nullable();
             $table->foreign('current_assessment_level_id')->references('id')->on('approval_levels')->onDelete('cascade');
+
+            $table->string('completed_assessment_levels')->after('current_assessment_level_id')->nullable(); //an array of levels that completed the assessments ex: [1,2,3]
         });
 
     }
@@ -117,6 +123,7 @@ class ApprovalLevels extends Migration
         Schema::table('approval_requests', function($table) {
             $table->dropForeign(['current_assessment_level_id']);
             $table->dropColumn('current_assessment_level_id');
+            $table->dropColumn('completed_assessment_levels');
         });
 
 
@@ -127,8 +134,9 @@ class ApprovalLevels extends Migration
             }
 
             $table->dropForeign(['approval_element_id']);
+            $table->dropForeign(['approval_request_id']);
             $table->dropForeign(['approval_level_id']);
-            $table->dropForeign(['approval_level_user_id']);
+            $table->dropForeign(['user_id']);
             $table->dropForeign(['approval_process_id']);
         });
 

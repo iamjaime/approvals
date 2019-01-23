@@ -5,7 +5,7 @@ namespace Httpfactory\Approvals\Repositories;
 use Httpfactory\Approvals\Contracts\Approvable;
 use Httpfactory\Approvals\Events\ApprovalRequest;
 use Httpfactory\Approvals\Models\ApprovalRequest as ApprovalRecord;
-use Httpfactory\Approvals\Models\ApprovalLevelRequest as Approver;
+use Httpfactory\Approvals\Models\ApprovalLevelRequest;
 use Httpfactory\Approvals\Models\ApprovalProcess;
 use Httpfactory\Approvals\Models\ApprovalLevel;
 use Httpfactory\Approvals\Models\User;
@@ -51,26 +51,34 @@ abstract class Approval implements Approvable {
     public $currentLevel;
 
 
-    public function __construct(ApprovalRequester $requester, ApprovalProcess $approvalProcess)
+    public function __construct(ApprovalRequester $requester, ApprovalProcess $approvalProcess, ApprovalRecord $approvalRequest = null)
     {
         $this->requester = $requester;
         $this->approvalProcess = $approvalProcess;
         $this->levels = $this->approvalProcess->approvalElement->levels;
+
+        if(!is_null($approvalRequest)){
+            $this->approvalRequest = $approvalRequest;
+        }
 
         if(!is_null($this->requester->currentTeam)){
             $this->team = $this->requester->currentTeam;
         }
 
         $this->getLevelUsers();
-        dd($this);
     }
 
     /**
-     * Sends the Approval Request
+     * Sends the Approval Request to the initial level
      */
     public function sendRequest()
     {
-        $this->saveApprovalRequest();
+        if(!$this->approvalRequest) {
+            $this->saveApprovalRequest();
+        }
+
+        $this->getCurrentAssessmentApprovalLevel();
+        $this->saveApprovalLevelRequest();
 
         //fires an event
         event(new ApprovalRequest($this));
@@ -107,23 +115,21 @@ abstract class Approval implements Approvable {
         $approvalRequest->team_id = $this->team->id;
         $approvalRequest->requester_id = $this->requester->id;
         $approvalRequest->approval_process_id = $this->approvalProcess->id;
-        $approvalRequest->current_assessment_level = $this->levels[0]->id; //initial level
+        $approvalRequest->current_assessment_level_id = $this->levels[0]->id; //initial level
         $approvalRequest->status = "pending";
         $approvalRequest->save();
 
         $this->approvalRequest = $approvalRequest;
-
-        $this->getCurrentAssessmentApprovalLevelUsers();
     }
 
 
     /**
-     * Handles getting the current approval level users
+     * Handles getting the current approval level with users
      */
-    private function getCurrentAssessmentApprovalLevelUsers()
+    private function getCurrentAssessmentApprovalLevel()
     {
         $userIds = [];
-        $currentLevel = ApprovalLevel::where('id', $this->approvalRequest->current_assessment_level)->with('users')->first();
+        $currentLevel = ApprovalLevel::where('id', $this->approvalRequest->current_assessment_level_id)->with('users')->first();
         foreach($currentLevel->users as $user){
             array_push($userIds, $user->user_id);
         }
@@ -132,6 +138,32 @@ abstract class Approval implements Approvable {
 
         $this->currentLevel = $currentLevel;
         $this->currentLevel->users = $users;
+    }
+
+
+    /**
+     * Handles saving the current level approval level request
+     */
+    protected function saveApprovalLevelRequest()
+    {
+        foreach($this->currentLevel->users as $user){
+
+            $approvalLevelRequest = new ApprovalLevelRequest();
+            $approvalLevelRequest->team_id = $this->team->id;
+
+            $approvalLevelRequest->approval_request_id = $this->approvalRequest->id;
+            $approvalLevelRequest->approval_process_id = $this->approvalProcess->id;
+            $approvalLevelRequest->approval_element_id = $this->approvalProcess->approvalElement->id;
+            $approvalLevelRequest->approval_level_id = $this->currentLevel->id;
+            $approvalLevelRequest->user_id = $user->id;
+            $approvalLevelRequest->status = "pending";
+            $approvalLevelRequest->token = str_random(16);
+            $approvalLevelRequest->save();
+
+            //now lets attach this new "approval level request" object to the user object....
+            $user->approval_level_request = $approvalLevelRequest;
+        }
+
     }
 
 }
