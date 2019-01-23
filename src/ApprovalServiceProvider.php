@@ -15,9 +15,9 @@ class ApprovalServiceProvider extends ServiceProvider
     public function boot()
     {
         //load up the migrations...
-        $this->loadMigrationsFrom(__DIR__ . '/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/Migrations');
         //load up the views...
-        $this->loadViewsFrom(__DIR__.'/views', 'approvals');
+        $this->loadViewsFrom(__DIR__.'/Views', 'approvals');
 
         //publish our views...
         $this->publishes([
