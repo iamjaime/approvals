@@ -3,7 +3,6 @@
 namespace Httpfactory\Approvals\Listeners;
 
 use Httpfactory\Approvals\Events\ApprovalRequest as ApprovalRequestEvent;
-use Httpfactory\Approvals\Models\Approver;
 
 use Illuminate\Support\Facades\Mail;
 use Httpfactory\Approvals\Mail\ApprovalRequest as ApprovalRequestEmail;
