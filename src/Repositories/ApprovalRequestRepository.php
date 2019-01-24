@@ -182,6 +182,7 @@ class ApprovalRequestRepository implements ApprovalRepositoryInterface
 
         if($approvalRequest->completed_assessment_levels) {
             $completedLevels = json_decode($approvalRequest->completed_assessment_levels);
+            $completedLevels[] = $approval->approval_level_id;
         }else{
             array_push($completedLevels, $approval->approval_level_id);
         }
