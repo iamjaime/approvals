@@ -4,6 +4,7 @@ namespace Httpfactory\Approvals\Repositories;
 
 use Httpfactory\Approvals\Contracts\ApprovalElementRepository as ApprovalElementRepositoryInterface;
 use Httpfactory\Approvals\Models\ApprovalElement;
+use Httpfactory\Approvals\Models\User;
 
 class ApprovalElementRepository implements ApprovalElementRepositoryInterface
 {
@@ -30,11 +31,35 @@ class ApprovalElementRepository implements ApprovalElementRepositoryInterface
     public function getAll($teamId)
     {
         if($teamId){
-            $approvalElement = ApprovalElement::where('team_id', $teamId)->get();
+            $approvalElement = ApprovalElement::where('team_id', $teamId)->with('levels.users')->get();
+            foreach ($approvalElement as $elem){
+                foreach($elem->levels as $level){
+                    $users = $this->getLevelUsers($level->users);
+                    unset($level->users);
+                    $level->users = $users;
+                }
+            }
         }else{
             $approvalElement = ApprovalElement::all();
         }
         return $approvalElement;
+    }
+
+    /**
+     * Handles getting the level user ids and converting them into
+     * User objects
+     */
+    private function getLevelUsers($users)
+    {
+        $userIds = [];
+
+            foreach($users as $user){
+                array_push($userIds, $user->user_id);
+            }
+
+        $users = User::whereIn('id', $userIds)->get();
+
+        return $users;
     }
 
     /**
