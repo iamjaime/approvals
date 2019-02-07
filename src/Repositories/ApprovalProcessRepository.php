@@ -72,7 +72,7 @@ class ApprovalProcessRepository implements ApprovalProcessRepositoryInterface
     {
         $process = ApprovalProcess::find($approvalProcessId);
 
-        if($data['approval_element_id']){
+        if(isset($data['approval_element_id'])){
             $process->approval_element_id = $data['approval_element_id'];
         }
 
