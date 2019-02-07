@@ -34,17 +34,17 @@ class PendingApprovalController extends Controller
     }
 
     /**
-     * Handles denying the Approval.
+     * Handles declining the Approval.
      *
      * @param $token
      * @return mixed
      */
-    public function deny($token)
+    public function decline($token)
     {
         $approvalRecord = $this->approval->tokenValid($token);
         abort_unless($approvalRecord, 404);
 
-        $denial = $this->approval->deny($token);
+        $denial = $this->approval->decline($token);
 
         //now we should redirect somewhere...
         return view('approvals::approvals.denied');
