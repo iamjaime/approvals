@@ -37,6 +37,23 @@ class CreateApprovalRequests extends Migration
 
             $table->enum('status', ['pending','awarded', 'denied'])->default('pending');
 
+
+            $table->timestamps();
+        });
+
+
+        Schema::create('approval_request_documents', function (Blueprint $table) {
+
+            $table->increments('id');
+
+            $table->string('document_name');
+            $table->string('document_url');
+
+            //Foreign Key Referencing the id on the users table.
+            $table->integer('approval_request_id')->unsigned();
+            $table->foreign('approval_request_id')->references('id')->on('approval_requests')->onDelete('cascade');
+
+
             $table->timestamps();
         });
     }
@@ -57,6 +74,12 @@ class CreateApprovalRequests extends Migration
             $table->dropForeign(['requester_id']);
             $table->dropForeign(['approval_process_id']);
         });
+
+        Schema::table('approval_request_documents', function($table) {
+            $table->dropForeign(['approval_request_id']);
+        });
+
         Schema::dropIfExists('approval_requests');
+        Schema::dropIfExists('approval_request_documents');
     }
 }
