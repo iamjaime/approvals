@@ -75,7 +75,7 @@ class ApprovalRequestRepository implements ApprovalRepositoryInterface
 
         //then fire off some event which indicates approval declined
         $approval = $approvalRecord;
-        $declinedBy = User::where('id', $approvalRecord->user_id)->first();;
+        $declinedBy = User::where('id', $approvalRecord->user_id)->first();
 
         event(new ApprovalDeclined($approval, $declinedBy));
 
