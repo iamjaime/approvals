@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Httpfactory\Approvals\Models\Tag;
 use Httpfactory\Approvals\Models\Team;
 use Httpfactory\Approvals\Models\User;
+use Httpfactory\Approvals\Models\ApprovalProcess;
+use Httpfactory\Approvals\Models\ApprovalRequestDocument;
 
 class ApprovalRequest extends Model
 {
@@ -45,6 +47,28 @@ class ApprovalRequest extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'approval_tags');
+    }
+
+
+    /**
+     * Gets the approval process associated with this request
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function approvalProcess()
+    {
+        return $this->hasOne(ApprovalProcess::class, 'id', 'approval_process_id');
+    }
+
+
+    /**
+     * Gets the documents that belong to this approval request.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function documents()
+    {
+        return $this->hasMany(ApprovalRequestDocument::class, 'approval_request_id', 'id');
     }
 
 }
