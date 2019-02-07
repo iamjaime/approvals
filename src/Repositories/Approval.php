@@ -71,10 +71,10 @@ abstract class Approval implements Approvable {
     /**
      * Sends the Approval Request to the initial level
      */
-    public function sendRequest()
+    public function sendRequest($attachments = null)
     {
         if(!$this->approvalRequest) {
-            $this->saveApprovalRequest();
+            $this->saveApprovalRequest($attachments);
         }
 
         $this->getCurrentAssessmentApprovalLevel();
@@ -109,7 +109,7 @@ abstract class Approval implements Approvable {
     /**
      * Handles saving the approval request
      */
-    protected function saveApprovalRequest()
+    protected function saveApprovalRequest($attachments = null)
     {
         $approvalRequest = new ApprovalRecord();
         $approvalRequest->team_id = $this->team->id;
@@ -118,6 +118,10 @@ abstract class Approval implements Approvable {
         $approvalRequest->current_assessment_level_id = $this->levels[0]->id; //initial level
         $approvalRequest->status = "pending";
         $approvalRequest->save();
+
+        if(!is_null($attachments)){
+            $approvalRequest->documents()->saveMany($attachments);
+        }
 
         $this->approvalRequest = $approvalRequest;
     }
