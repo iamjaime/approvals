@@ -7,10 +7,6 @@ $router->group(['middleware' => 'web'], function ($router) {
     // Deny
     $router->get('/deny/{token}', 'PendingApprovalController@deny');
 
-
-    //Create Approval Group
-    $router->resource('group', 'ApproverGroupController');
-
 });
 
 
