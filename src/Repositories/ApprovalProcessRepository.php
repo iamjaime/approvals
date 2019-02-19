@@ -78,6 +78,8 @@ class ApprovalProcessRepository implements ApprovalProcessRepositoryInterface
 
         $process->fill($data);
         $process->save();
+
+        return $process;
     }
 
 
