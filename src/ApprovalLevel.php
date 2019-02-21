@@ -76,7 +76,7 @@ class ApprovalLevel extends ApprovalLevelRepository {
                 'team_id' => $team_id,
             ]);
         }
-        $level->users()->saveMany($levelUsers);
+        $level->approvers()->saveMany($levelUsers);
     }
 
 
