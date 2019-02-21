@@ -4,6 +4,7 @@ namespace Httpfactory\Approvals\Repositories;
 
 use Httpfactory\Approvals\Contracts\ApprovalProcessRepository as ApprovalProcessRepositoryInterface;
 use Httpfactory\Approvals\Models\ApprovalProcess;
+use Httpfactory\Approvals\Models\User;
 
 class ApprovalProcessRepository implements ApprovalProcessRepositoryInterface
 {
@@ -18,8 +19,30 @@ class ApprovalProcessRepository implements ApprovalProcessRepositoryInterface
     {
         $approvalProcess = ApprovalProcess::where('id', $approvalProcessId)->with(['approvalElement.levels' => function ($query) {
             $query->orderBy('level_order', 'asc');
-        }, 'approvalElement.levels.users'])->first();
+        }, 'approvalElement.levels.approvers'  => function($query){
+            $query->leftJoin('users', 'users.id', '=', 'approval_level_users.user_id');
+        }])->first();
+
         return $approvalProcess;
+    }
+
+
+    /**
+     * Handles formatting the approvers for clean output to ui
+     *
+     * @param $level
+     * @return array
+     */
+    private function formatTheApprovers($level)
+    {
+        $users = [];
+
+        foreach($level->approvers as $approver){
+            $user = User::where('id', $approver->user_id)->first();
+            array_push($users, $user);
+        }
+
+        return $users;
     }
 
 

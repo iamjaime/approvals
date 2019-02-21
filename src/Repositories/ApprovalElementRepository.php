@@ -31,12 +31,12 @@ class ApprovalElementRepository implements ApprovalElementRepositoryInterface
     public function getAll($teamId)
     {
         if($teamId){
-            $approvalElement = ApprovalElement::where('team_id', $teamId)->with('levels.users')->get();
+            $approvalElement = ApprovalElement::where('team_id', $teamId)->with('levels.approvers')->get();
             foreach ($approvalElement as $elem){
                 foreach($elem->levels as $level){
-                    $users = $this->getLevelUsers($level->users);
-                    unset($level->users);
-                    $level->users = $users;
+                    $users = $this->getLevelUsers($level->approvers);
+                    unset($level->approvers);
+                    $level->approvers = $users;
                 }
             }
         }else{
