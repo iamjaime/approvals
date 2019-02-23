@@ -30,7 +30,7 @@ class ApprovalLevel extends ApprovalLevelRepository {
             ]);
         }
 
-        $level->users()->saveMany($levelUsers);
+        $level->approvers()->saveMany($levelUsers);
 
         return $level;
     }

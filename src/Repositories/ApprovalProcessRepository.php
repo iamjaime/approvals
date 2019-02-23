@@ -5,6 +5,7 @@ namespace Httpfactory\Approvals\Repositories;
 use Httpfactory\Approvals\Contracts\ApprovalProcessRepository as ApprovalProcessRepositoryInterface;
 use Httpfactory\Approvals\Models\ApprovalProcess;
 use Httpfactory\Approvals\Models\User;
+use Httpfactory\Approvals\Models\Tag;
 
 class ApprovalProcessRepository implements ApprovalProcessRepositoryInterface
 {
