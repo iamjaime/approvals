@@ -18,7 +18,7 @@ class ApprovalProcessRepository implements ApprovalProcessRepositoryInterface
      */
     public function getById($approvalProcessId)
     {
-        $approvalProcess = ApprovalProcess::where('id', $approvalProcessId)->with(['approvalElement.levels' => function ($query) {
+        $approvalProcess = ApprovalProcess::where('id', $approvalProcessId)->with(['tags','approvalElement.levels' => function ($query) {
             $query->orderBy('level_order', 'asc');
         }, 'approvalElement.levels.approvers'  => function($query){
             $query->leftJoin('users', 'users.id', '=', 'approval_level_users.user_id');
@@ -56,7 +56,7 @@ class ApprovalProcessRepository implements ApprovalProcessRepositoryInterface
     public function getAll($teamId)
     {
         if($teamId){
-            $approvalProcesses = ApprovalProcess::where('team_id', $teamId)->with(['approvalElement.levels' => function ($query) {
+            $approvalProcesses = ApprovalProcess::where('team_id', $teamId)->with(['tags', 'approvalElement.levels' => function ($query) {
                 $query->orderBy('level_order', 'asc');
             }])->get();
         }else{
