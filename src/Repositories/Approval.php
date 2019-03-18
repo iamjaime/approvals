@@ -92,7 +92,12 @@ abstract class Approval implements Approvable {
     private function getLevelUsers()
     {
         $userIds = [];
+
         foreach($this->levels as $level){
+
+            if(isset($level->approvers)){
+                $level->users = $level->approvers;
+            }
 
             foreach($level->users as $user){
                 array_push($userIds, $user->user_id);
@@ -133,7 +138,12 @@ abstract class Approval implements Approvable {
     private function getCurrentAssessmentApprovalLevel()
     {
         $userIds = [];
-        $currentLevel = ApprovalLevel::where('id', $this->approvalRequest->current_assessment_level_id)->with('users')->first();
+        $currentLevel = ApprovalLevel::where('id', $this->approvalRequest->current_assessment_level_id)->with('approvers')->first();
+
+        if($currentLevel->approvers){
+            $currentLevel->users = $currentLevel->approvers;
+        }
+
         foreach($currentLevel->users as $user){
             array_push($userIds, $user->user_id);
         }

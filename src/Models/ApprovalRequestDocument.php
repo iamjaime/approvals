@@ -11,6 +11,7 @@ class ApprovalRequestDocument extends Model
     protected $fillable = [
         'document_name',
         'document_url',
+        'document_filesize'
     ];
 
     /**
